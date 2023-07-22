@@ -18,7 +18,8 @@ spec:
     spec:
       containers:
       - name: guestbook
-        image: nscr.io/01gr48y5j6qv4mgheyj4mchj76/guestbook:v4
+        image: guestbook
+        imagePullPolicy: Always
         ports:
         - name: http-server
           containerPort: 3000

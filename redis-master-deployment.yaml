@@ -18,6 +18,6 @@ spec:
     spec:
       containers:
       - name: master
-        image: registry.k8s.io/redis:e2e  # or just image: redis
+        image: registry.k8s.io/redis:e2e 
         ports:
         - containerPort: 6379
