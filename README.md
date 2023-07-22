@@ -95,3 +95,8 @@ into your development workflow. You can build, deploy and get a preview of your 
     ```
 
 1. Done! Now you can access the above URL and check out your changes. The same URL is also accessible by all your teammates that are part of your Namespace workspace. 
+
+## Attributions
+
+The prominent Kubernetes tutorial heavily inspired the Guestbook application we used in this guide.
+Check [their repository](https://github.com/kubernetes/examples/tree/master/guestbook-go) out!
