@@ -70,7 +70,7 @@ into your development workflow. You can build, deploy and get a preview of your 
 
 1. (Optional) You can verify that pods and services are up and running
     ```sh
-    $ kubectl get pods
+    $ kubectl get pods,svc
     NAME                                 READY   STATUS    RESTARTS   AGE
     pod/guestbook-685577f476-qk594       1/1     Running   0          25m
     pod/guestbook-685577f476-pl8pw       1/1     Running   0          25m
