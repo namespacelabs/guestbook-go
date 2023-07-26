@@ -1,5 +1,5 @@
 on: [push, workflow_dispatch]
-name: e2e with steps in correct order, with caching and parallelism
+name: e2e with nscloud runners
 
 
 permissions:
@@ -16,6 +16,8 @@ jobs:
     name: Go mod Guestbook App
     runs-on: nscloud
     steps:
+      - uses: actions/checkout@v3
+
       # Setup-go action takes care of caching Go modules for you.
       - uses: actions/setup-go@v4
         with:
@@ -29,6 +31,8 @@ jobs:
     name: Go fmt Guestbook App
     runs-on: nscloud
     steps:
+      - uses: actions/checkout@v3
+
       # Setup-go action takes care of caching Go modules for you.
       - uses: actions/setup-go@v4
         with:
@@ -42,6 +46,8 @@ jobs:
     name: Go test Guestbook App
     runs-on: nscloud
     steps:
+      - uses: actions/checkout@v3
+
       # Setup-go action takes care of caching Go modules for you.
       - uses: actions/setup-go@v4
         with:
