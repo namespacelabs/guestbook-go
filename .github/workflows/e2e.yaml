@@ -38,9 +38,13 @@ jobs:
           tags: ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
           platforms: linux/amd64,linux/arm64
 
-      - uses: actions/setup-go@v4
-        with:
-          go-version: '>=1.20.0'
+      - name: Install Go
+        run: |
+          curl -OL https://go.dev/dl/go1.20.6.linux-amd64.tar.gz
+          sudo rm -rf /usr/local/go 
+          sudo tar -C /usr/local -xzf go1.20.6.linux-amd64.tar.gz
+          export PATH=$PATH:/usr/local/go/bin
+          go version
       
       - name: Check Go Formatting
         run: go fmt ./... && git diff --exit-code
