@@ -1,0 +1,82 @@
+on: [push, workflow_dispatch]
+name: e2e with steps in correct order, with caching and parallelism
+
+
+permissions:
+  contents: read
+  packages: write # This is required to push to GitHub registry
+
+env:
+  IMAGE_NAME: guestbook
+  IMAGE_REPO: ghcr.io/${{ github.repository_owner }}
+  VERSION: v0.0.1
+
+jobs: 
+  e2e-go-mod:
+    name: Go mod Guestbook App
+    runs-on: nscloud
+    steps:
+      # Setup-go action takes care of caching Go modules for you.
+      - uses: actions/setup-go@v4
+        with:
+          go-version: '>=1.20.0'
+
+      - name: Check Go Mod Tidyness
+        run: go mod tidy && git diff --exit-code
+
+
+  e2e-go-fmt:
+    name: Go fmt Guestbook App
+    runs-on: nscloud
+    steps:
+      # Setup-go action takes care of caching Go modules for you.
+      - uses: actions/setup-go@v4
+        with:
+          go-version: '>=1.20.0'
+
+      - name: Check Go Formatting
+        run: go fmt ./... && git diff --exit-code
+
+
+  e2e-go-test:
+    name: Go test Guestbook App
+    runs-on: nscloud
+    steps:
+      # Setup-go action takes care of caching Go modules for you.
+      - uses: actions/setup-go@v4
+        with:
+          go-version: '>=1.20.0'
+
+      - name: Test
+        run: go test ./...
+
+  e2e-docker:
+    name: Build Guestbook App
+    runs-on: nscloud
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+    
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      # Setup build driver to use Buildkit container
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+          platforms: linux/amd64,linux/arm64
+          cache-from: type=gha # Use GitHub Actions Cache
+          cache-to: type=gha,mode=max
+      
